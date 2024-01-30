@@ -68,18 +68,15 @@ bin/plumber run --help
 #   run the pipeline
 
 # Arguments:
-#   PIPELINE_NAMES                    # name of pipelines to run
+#   PIPELINE_NAMES                        # name of pipelines to run
 #
 # Options:
-#   --help, -h                        # Print this help
+#   --help, -h                            # Print this help
 #
 # Examples:
-#   plumber run                          # runs all pipelines
-#   plumber run pipeline_1 pipeline_2    # runs only the specified pipelines
+#   plumber run                           # runs all pipelines
+#   plumber run pipeline_1 pipeline_2     # runs only the specified pipelines
 
-
-bin/plumber run                         # runs all pipelines
-bin/plumber run pipeline_1 pipeline_2   # runs only the specified pipelines
 ```
 
 ### Pipeline Definition
