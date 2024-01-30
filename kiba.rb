@@ -5,18 +5,13 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 require 'kiba'
+require 'yaml'
 
 require_relative 'pipelines/armor_company_sync'
 require_relative 'pipelines/armor_agent_sync'
 
+pipelines = YAML.load File.read('pipelines.yml')
 
-jobs = [
-  ArmorCompanySync::SyncJob.setup({}),
-  ArmorAgentSync::SyncJob.setup({})
-]
-
-jobs.each do |job|
-  Kiba.run(job)
+pipelines.each do |pipeline|
+  debugger
 end
-
-Database.close_active_connections
