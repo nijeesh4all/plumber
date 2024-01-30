@@ -37,6 +37,7 @@ class PipelineRunner
       next if @pipelines_to_run.any? && !@pipelines_to_run.include?(pipeline_name)
       pipeline_factory = Pipelines::Factory.new(pipeline_config[0])
       Kiba.run(pipeline_factory.pipeline)
+      @logger.info "#{"=" * 50} PIPELINE RAN #{pipeline_name} #{"=" * 50}"
     end
   end
 end
