@@ -10,11 +10,13 @@ module Postgres
         @primary_key = primary_key
         @database = Database.setup(database_name)
         @table_name = table_name
+        @logger = PipelineLogger.instance
+        @logger.info "writing columns #{columns} to table #{table_name} on #{database_name} db"
         prepare_write_statement!
       end
 
       def write(row)
-        @database.connection.exec_prepared(prepared_statement_name, values(row))
+        result = @database.connection.exec_prepared(prepared_statement_name, values(row))
       end
 
       def values(row)
@@ -43,10 +45,11 @@ module Postgres
       end
 
       def prepared_statement_name
-        self.class.name + table_name + primary_key
+        [self.class.name , table_name , primary_key].join('_')
       end
 
       def prepare_write_statement!
+        @logger.debug "prepared_statement #{prepared_statement_name}, #{write_query.gsub(/(\s+)/, " ")}"
         @prepared_statement ||= @database.connection.prepare prepared_statement_name, write_query
       end
 

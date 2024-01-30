@@ -5,20 +5,26 @@ require_relative '../../../config/database'
 module Postgres
   module Source
     class Base
-      attr_reader :batch_size, :columns, :database_name, :table_name
-      def initialize(database_name:, columns: nil , batch_size: 1000, table_name: nil)
+      attr_reader :batch_size, :columns, :database_name, :table_name, :where_clause
+      def initialize(database_name:, columns: nil , batch_size: 1000, table_name: nil, where_clause: nil)
         @database = Database.setup(database_name)
         @columns = columns
         @batch_size = batch_size
         @table_name = table_name
+        @where_clause = where_clause
+        @logger = PipelineLogger.instance
+        @logger.info "querying columns #{columns} to table #{table_name} on #{database_name} db"
       end
 
       def each
         offset = 0
         row_count = 0
+        @logger.info "total records to sync #{self.count}"
+        started_time = Time.now
 
         loop do
           query = "#{select_query} OFFSET #{offset} LIMIT #{batch_size}"
+          @logger.info 'running query', query
 
           results = @database.connection.exec(query)
 
@@ -37,6 +43,7 @@ module Postgres
           offset += batch_size
           break if row_count >= batch_size
         end
+        @logger.info "total time to sync #{Time.now - started_time}s"
       end
 
       def count
@@ -47,7 +54,9 @@ module Postgres
       private
 
       def select_query(columns = self.columns)
-        "SELECT #{columns} FROM #{table_name}"
+        query = "SELECT #{columns} FROM #{table_name}"
+        query += " WHERE #{where_clause}" unless where_clause.nil?
+        query
       end
 
       def columns

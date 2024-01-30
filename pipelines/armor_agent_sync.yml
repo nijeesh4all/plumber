@@ -5,6 +5,7 @@
     attributes:
       database_name: 'rently'
       table_name: 'agents'
+      where_clause: 'armor_id is NOT NULL'
       columns:
         - id
         - email
