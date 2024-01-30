@@ -1,0 +1,67 @@
+- pipeline:
+  name: 'Sync agents from rently to armor'
+  source:
+    class: 'Postgres::Source::Base'
+    attributes:
+      database_name: 'rently'
+      table_name: 'agents'
+      columns:
+        - id
+        - email
+        - encrypted_password
+        - reset_password_token
+        - reset_password_sent_at
+        - remember_created_at
+        - sign_in_count
+        - current_sign_in_at
+        - last_sign_in_at
+        - current_sign_in_ip
+        - last_sign_in_ip
+        - user_id fullname
+        - voice_phone
+        - active
+        - created_at
+        - updated_at
+        - role
+        - salesforce_id
+        - deleted_at
+        - armor_id
+
+  transforms:
+    - class: 'Transforms::ColumnRename'
+      attributes:
+        columns_map:
+          id: 'rently_id'
+          user_id: 'company_id'
+          armor_id: 'id'
+
+  destination:
+    class: 'Postgres::Destination::Base'
+    attributes:
+      database_name: 'armor'
+      table_name: 'agent_identities'
+      columns:
+        - email
+        - id
+        - encrypted_password
+        - reset_password_token
+        - reset_password_sent_at
+        - remember_created_at
+        - sign_in_count
+        - current_sign_in_at
+        - last_sign_in_at
+        - current_sign_in_ip
+        - last_sign_in_ip
+        - created_at
+        - updated_at
+        - company_id
+        - api_user
+        - deleted_at
+        - active
+        - fullname
+        - salesforce_id
+        - rently_agent_last_updated
+        - role
+        - voice_phone
+        - rently_id
+      primary_key: 'id'

@@ -5,11 +5,14 @@ require_relative 'config/setup'
 require 'kiba'
 require 'yaml'
 
-require_relative 'pipelines/armor_company_sync'
-require_relative 'pipelines/armor_agent_sync'
+configurations = []
 
-pipelines = YAML.load File.read('pipelines.yml')
+Dir.glob('./pipelines/*.yml').map do |file|
+  loaded_config = YAML.load(File.read(file), symbolize_names: true)
+  configurations += loaded_config
+end
 
-pipelines.each do |pipeline|
-  debugger
+configurations.each do |pipeline_config|
+  pipeline_factory = Pipelines::Factory.new(pipeline_config)
+  Kiba.run(pipeline_factory.pipeline)
 end

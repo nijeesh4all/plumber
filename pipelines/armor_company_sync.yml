@@ -1,0 +1,34 @@
+- pipeline:
+  name: 'Sync users/companies from rently to armor'
+  source:
+    class: 'Postgres::Source::Base'
+    attributes:
+      database_name: 'rently'
+      table_name: 'users'
+      columns:
+        - id
+        - fullname
+        - created_at
+        - updated_at
+        - salesforce_id
+        - rently_id
+        - enable_multifamily
+        - platform_mode
+        - authentication_status
+
+  destination:
+    class: 'Postgres::Destination::Base'
+    attributes:
+      database_name: 'armor'
+      table_name: 'companies'
+      columns:
+        - id
+        - fullname
+        - created_at
+        - updated_at
+        - salesforce_id
+        - rently_id
+        - enable_multifamily
+        - platform_mode
+        - authentication_status
+      primary_key: 'id'

@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
-class Postgres
+require_relative '../../../config/database'
+
+module Postgres
   module Source
     class Base
-      attr_reader :batch_size, :columns, :database_name, :source_table_name
-      def initialize(database_name:, columns: nil , batch_size: 1000, source_table_name: nil)
+      attr_reader :batch_size, :columns, :database_name, :table_name
+      def initialize(database_name:, columns: nil , batch_size: 1000, table_name: nil)
         @database = Database.setup(database_name)
         @columns = columns
         @batch_size = batch_size
-        @source_table_name = source_table_name || table_name_from_class
+        @table_name = table_name
       end
 
       def each
@@ -44,12 +46,8 @@ class Postgres
 
       private
 
-      def table_name_from_class
-        self.class.name.split("::").last
-      end
-
       def select_query(columns = self.columns)
-        "SELECT #{columns} FROM #{source_table_name}"
+        "SELECT #{columns} FROM #{table_name}"
       end
 
       def columns
