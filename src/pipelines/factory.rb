@@ -6,7 +6,7 @@ module Pipelines
 
     def initialize(configuration)
       @configuration = configuration
-      @name = configuration["name"]
+      @name = configuration[:name]
     end
 
     def pipeline

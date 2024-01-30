@@ -33,12 +33,53 @@ bundle install
 
 The pipeline definition is loaded from a YAML file. You can customize the source, destination, and any transformation steps in this YAML file.
 
-#### Running the ETL
+## Running the ETL with CLI
 
-To execute the ETL process, run the following command:
+### Available Commands
 
-```bash
-bundle exec ruby etl.rb
+#### help
+Prints the help menue
+```
+bin/plumber
+```
+
+#### ls
+
+Prints all available pipelines.
+
+```sh
+bin/plumber ls
+```
+
+#### run
+
+Runs the specified pipelines.
+
+```sh
+bin/plumber run --help
+
+# Command:
+#   plumber run
+
+# Usage:
+#   plumber run [PIPELINE_NAMES]
+
+# Description:
+#   run the pipeline
+
+# Arguments:
+#   PIPELINE_NAMES                    # name of pipelines to run
+#
+# Options:
+#   --help, -h                        # Print this help
+#
+# Examples:
+#   plumber run                          # runs all pipelines
+#   plumber run pipeline_1 pipeline_2    # runs only the specified pipelines
+
+
+bin/plumber run                         # runs all pipelines
+bin/plumber run pipeline_1 pipeline_2   # runs only the specified pipelines
 ```
 
 ### Pipeline Definition

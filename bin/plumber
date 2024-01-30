@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+require 'dry/cli'
+require_relative '../config/setup'
+require_relative '../pipeline_runner'
+
+class PlumberCli
+  extend Dry::CLI::Registry
+
+  class Ls < Dry::CLI::Command
+    desc "print all the available pipelines"
+
+    def call(*)
+      pipelines = PipelineRunner::load_pipeline_configurations
+      puts "Available Pipelines"
+      print "Name".ljust(30), "| " , "Description".ljust(30), "\n"
+      print "-" * 100,  "\n"
+      pipelines.each do |filename, configuration|
+        print filename.ljust(30), "| " ,configuration[0][:name].rjust(30),"\n"
+      end
+    end
+  end
+
+  class Run < Dry::CLI::Command
+    desc "run the pipeline"
+    argument :pipeline_names, desc: 'name of pipelines to run', type: :array, required: false
+    example "                         # runs all pipelines"
+    example "pipeline_1 pipeline_2    # runs only the specified pipelines"
+
+    def call(pipeline_names: [], **)
+      PipelineRunner.new(pipeline_names).run_pipelines
+    end
+
+  end
+
+  register "ls", Ls, aliases: %w[ls -ls --ls]
+  register 'run', Run
+end
+
+Dry::CLI.new(PlumberCli).call
