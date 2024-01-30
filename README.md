@@ -110,6 +110,25 @@ The pipeline definition is structured in a YAML format, specifying the source, t
       primary_key: 'id'
 ```
 
+### File Structure
+
+- `config/` : This directory contains configuration files for the project.
+    - `database.yml` : Stores database connection settings, If you want to add a new database to the
+      project, you can add the connection settings here.
+
+- `lib/` : This directory typically holds additional Ruby libraries or modules used in the project.
+
+- `pipelines/` : Contains YAML files defining ETL pipeline configurations.
+  If you want to add a new pipeline, you can add a new YAML file here. Single YAML
+  file can contain multiple pipelines.
+
+- `src/` : Source code directory.
+    - `pipelines/` : Contains Ruby files related to pipeline execution.
+    - `postgres/` : Directory for PostgreSQL related code.
+    - `transforms/`: Contains classes for data transformation.
+
+
+
 ### Sources
 The sources are components responsible for the extraction of data.
 
@@ -166,14 +185,17 @@ Examples of transformations include renaming columns, copying values, or perform
 
 #### Available Transforms
 1. ValueCopy : Copies values from one column to another.
-    ``` 
-        columns_map: A hash mapping source column names to destination column names.
-    ```
+
+   | Attribute     | Description                                                     |
+   |---------------|-----------------------------------------------------------------|
+   | `columns_map` | A hash mapping source column names to destination column names. |
 
 2. ColumnRename : Renames columns according to the specified mapping.
-    ```
-        columns_map: A hash mapping original column names to new column names.
-    ```
+
+   | Attribute     | Description                                               |
+   |---------------|-----------------------------------------------------------|
+   | `columns_map` | A hash mapping original column names to new column names. |
+
 
 #### Creating custom transformations
 A Kiba transform is a Ruby class with:
@@ -183,28 +205,6 @@ A Kiba transform is a Ruby class with:
 - optional: a close method (useful for "yielding transforms" in particular, see next section)
 
 check Kiba documentation for more info : https://github.com/thbar/kiba/wiki/Implementing-ETL-transforms
-
-### File Structure
-
-- `config/` : This directory contains configuration files for the project.
-    - `database.yml` : Stores database connection settings, If you want to add a new database to the
-        project, you can add the connection settings here.
-    
-
-
-- `kiba.rb` : Entry point for the Kiba ETL tool. This file may define global settings or require other necessary files.
-
-- `lib/` : This directory typically holds additional Ruby libraries or modules used in the project.
-
-- `pipelines/` : Contains YAML files defining ETL pipeline configurations.
-              If you want to add a new pipeline, you can add a new YAML file here. Single YAML 
-              file can contain multiple pipelines.
-
-- `src/` : Source code directory.
-    - `pipelines/` : Contains Ruby files related to pipeline execution.
-    - `postgres/` : Directory for PostgreSQL related code. 
-    - `transforms/`: Contains classes for data transformation.
-
 
 ### Resources
 
