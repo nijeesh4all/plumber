@@ -1,19 +1,7 @@
-## Ruby ETL Tool using Kiba Gem
+## Plumber
+### Ruby ETL Tool using Kiba Gem
 
 This repository contains a Ruby ETL (Extract, Transform, Load) tool built on top of the Kiba gem. It facilitates copying data from one table to another table, with the ability to define custom transformation steps. The tool loads the pipeline definition from a YAML file, allowing for easy configuration and customization.
-
-### Table of Contents
-
-- [Introduction](#introduction)
-- [Usage](#usage)
-    - [Installation](#installation)
-    - [Configuration](#configuration)
-    - [Running the ETL](#running-the-etl)
-- [Pipeline Definition](#pipeline-definition)
-- [Transformations](#transformations)
-- [Resources](#resources)
-- [Contributing](#contributing)
-- [License](#license)
 
 ### Introduction
 
@@ -28,10 +16,6 @@ To use this ETL tool, you need to have Ruby installed on your system. You can in
 ```bash
 bundle install
 ```
-
-#### Configuration
-
-The pipeline definition is loaded from a YAML file. You can customize the source, destination, and any transformation steps in this YAML file.
 
 ## Running the ETL with CLI
 
@@ -79,6 +63,12 @@ bin/plumber run --help
 
 ```
 
+---
+
+## Configuration
+
+The pipeline definition is loaded from a YAML file. You can customize the source, destination, and any transformation steps in this YAML file.
+
 ### Pipeline Definition
 
 The pipeline definition is structured in a YAML format, specifying the source, transformation steps (optional), and destination. Below is an example YAML file:
@@ -125,11 +115,12 @@ The sources are components responsible for the extraction of data.
 
 #### Postgres Source
 **class name :** `Postgres::Source::Base` Retrieves data from a PostgreSQL database.
-```
-    database_name: The name of the PostgreSQL database.
-    table_name: The name of the table to extract data from.
-    columns: An array of column names to extract from the table.
-```
+
+| Attribute       | Description                                         |
+|-----------------|-----------------------------------------------------|
+| `database_name` | The name of the PostgreSQL database.                |
+| `table_name`    | The name of the table to extract data from.         |
+| `columns`       | An array of column names to extract from the table. |
 
 #### Creating custom sources
 Sources are classes implementing:
@@ -150,12 +141,14 @@ Destinations are components responsible for the writing of data to a destination
 **class name :** `Postgres::Destination::Base`
 
 Writes data to a PostgreSQL database.
-```
-    database_name: The name of the PostgreSQL database.
-    table_name: The name of the table to write data to.
-    columns: An array of column names to write to the table.
-    primary_key: The primary key column of the destination table.
-```
+
+| Attribute       | Description                                      |
+|-----------------|--------------------------------------------------|
+| `database_name` | The name of the PostgreSQL database.             |
+| `table_name`    | The name of the table to write data to.          |
+| `columns`       | An array of column names to write to the table.  |
+| `primary_key`   | The primary key column of the destination table. |
+
 
 #### Creating custom destinations
 Like sources, destinations are classes that you are providing. Destinations must implement:
