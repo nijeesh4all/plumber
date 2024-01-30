@@ -28,6 +28,11 @@
         - armor_id
 
   transforms:
+    - class: 'Transforms::ValueCopy'
+      attributes:
+        columns_map:
+          updated_at: 'rently_agent_last_updated'
+
     - class: 'Transforms::ColumnRename'
       attributes:
         columns_map:
