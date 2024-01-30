@@ -20,7 +20,7 @@ module Postgres
         offset = 0
         row_count = 0
         @logger.info "total records to sync #{self.count}"
-        started_time = Time.now
+
 
         loop do
           query = "#{select_query} OFFSET #{offset} LIMIT #{batch_size}"
@@ -43,7 +43,7 @@ module Postgres
           offset += batch_size
           break if row_count >= batch_size
         end
-        @logger.info "total time to sync #{Time.now - started_time}s"
+
       end
 
       def count

@@ -33,10 +33,12 @@ class PipelineRunner
     configurations = PipelineRunner.load_pipeline_configurations
 
     configurations.each do |pipeline_name, pipeline_config|
-      @logger.info "loading pipeline #{pipeline_name}"
+      @logger.info "#{"=" * 50} PIPELINE LOADED #{pipeline_name} #{"=" * 50}"
+      started_time = Time.now
       next if @pipelines_to_run.any? && !@pipelines_to_run.include?(pipeline_name)
       pipeline_factory = Pipelines::Factory.new(pipeline_config[0])
       Kiba.run(pipeline_factory.pipeline)
+      @logger.info "total time to sync #{Time.now - started_time}s"
       @logger.info "#{"=" * 50} PIPELINE RAN #{pipeline_name} #{"=" * 50}"
     end
   end
