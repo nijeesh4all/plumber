@@ -1,0 +1,16 @@
+rently:
+  host: 172.18.0.3
+  port: 5432
+  dbname: rently
+  user: docker
+  password: docker
+
+armor:
+  host: 172.18.0.3
+  port: 5432
+  dbname: armor_development_2
+  user: docker
+  password: docker
+
+#pipeline:
+#  - name: source_to_destination
