@@ -34,7 +34,6 @@ class PipelineRunner
 
     configurations.each do |pipeline_name, pipeline_config|
       next if @pipelines_to_run.any? && !@pipelines_to_run.include?(pipeline_name)
-      debugger
       pipeline_factory = Pipelines::Factory.new(pipeline_config[0])
       Kiba.run(pipeline_factory.pipeline)
     end
