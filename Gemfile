@@ -28,3 +28,6 @@ gem 'dry-cli'
 
 # Ruby code linter
 gem 'standard'
+
+# load environment variables from .env file
+gem 'dotenv'

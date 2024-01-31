@@ -3,6 +3,7 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'zeitwerk'
+require 'dotenv/load'
 
 Bundler.require(:default)
 
