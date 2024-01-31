@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'bundler/setup'
-require "zeitwerk"
+require 'zeitwerk'
 
 Bundler.require(:default)
 
