@@ -1,13 +1,8 @@
 ## Plumber
 ### Ruby ETL Tool using Kiba Gem
 
-This repository contains a Ruby ETL (Extract, Transform, Load) tool built on top of the Kiba gem. It facilitates copying data from one table to another table, with the ability to define custom transformation steps. The tool loads the pipeline definition from a YAML file, allowing for easy configuration and customization.
-
-### Introduction
-
-This ETL tool is designed to efficiently transfer data between tables in different databases. It leverages the power of Kiba, a lightweight, flexible ETL framework for Ruby, for defining and executing data processing pipelines.
-
-### Usage
+This repository contains a Ruby ETL (Extract, Transform, Load) tool built on top of the Kiba gem. It facilitates copying data from one Source to a Destination, 
+with the ability to define custom transformation steps. The tool loads the pipeline definition from a YAML file, allowing for easy configuration and customization.
 
 #### Installation
 
