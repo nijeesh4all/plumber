@@ -1,44 +1,52 @@
 # frozen_string_literal: true
+
 require 'pg'
 require 'yaml'
 require 'erb'
 
+# The Database class encapsulates functionality for managing PostgreSQL database connections.
+# It reads database configurations from the 'config/database.yml' file, using ERB for templating.
+# The class ensures that only one connection is established per database configuration.
+# Additionally, it provides methods to check the connection status, close active connections, and more.
+#
+# @example:
+#   db_connection = Database.setup('armor')
+#   puts "Is the connection active? #{db_connection.active?}"
+#   Database.close_active_connections
 class Database
   template = ERB.new File.new('config/database.yml').read
   CONFIG = YAML.load template.result(binding)
 
-  CONNECTIONS = {}
-  def self.setup(name)
-    return CONNECTIONS[name] if CONNECTIONS[name]
+  CONNECTIONS = {}.freeze
+  def self.setup(database_name)
+    return CONNECTIONS[database_name] if CONNECTIONS[database_name]
 
-    if CONFIG[name]
-      CONNECTIONS[name] = new(CONFIG[name])
-      return CONNECTIONS[name]
+    if CONFIG[database_name]
+      CONNECTIONS[database_name] = new(CONFIG[database_name])
+      return CONNECTIONS[database_name]
     end
 
-    raise "No database configuration for '#{name}' found"
+    raise "No database configuration for '#{database_name}' found"
   end
 
   def self.close_active_connections
     CONNECTIONS.each do |name, connection|
-      connection.close
+      connection.close if connection.active?
       CONNECTIONS.delete(name)
     end
   end
+
+  attr_reader :connection
 
   def initialize(config)
     @connection = PG.connect(config)
   end
 
-  def connection
-    @connection
-  end
-
   def active?
-    @connection.status == PG::Constants::CONNECTION_OK
+    connection.status == PG::Constants::CONNECTION_OK
   end
 
   def close
-    @connection.finish
+    connection.finish
   end
 end
