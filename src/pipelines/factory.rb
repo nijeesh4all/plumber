@@ -1,6 +1,15 @@
 # frozen_string_literal: true
 
 module Pipelines
+  # The Factory class is responsible for creating Kiba ETL pipelines based on configuration settings.
+  # It takes a pipeline configuration hash and provides a 'pipeline' method to generate the Kiba pipeline.
+  #
+  # @example:
+  #   factory = Pipelines::Factory.new({ name: 'SamplePipeline', source: { class: 'SampleSource', attributes: {} },
+  #                                       destination: { class: 'SampleDestination', attributes: {} },
+  #                                       transforms: [{ class: 'SampleTransform', attributes: {} }] })
+  #   pipeline = factory.pipeline
+  #   Kiba.run(pipeline)
   class Factory
     attr_reader :name, :source, :destination
 
@@ -10,20 +19,20 @@ module Pipelines
     end
 
     def pipeline
-      source_class = self.source_class
-      source_attributes = self.source_attributes
-      destination_class = self.destination_class
-      destination_attributes = self.destination_attributes
-      transforms = self.transforms
+      # we have to pass it like this, as `Kiba.parse` gets executed in the context of the `Kiba::Context` class
+      # Hence does not have access to the scope of the `Factory` class's instance variables
+      kiba_config = {
+        source_class:, source_attributes:, transforms:, destination_class:, destination_attributes:
+      }
 
       Kiba.parse do
-        source source_class, **source_attributes
+        source kiba_config[:source_class], **kiba_config[:source_attributes]
 
-        transforms.each do |transform_class, transform_attributes|
+        kiba_config[:transforms].each do |transform_class, transform_attributes|
           transform transform_class, **transform_attributes
         end
 
-        destination destination_class, **destination_attributes
+        destination kiba_config[:destination_class], **kiba_config[:destination_attributes]
       end
     end
 
@@ -64,7 +73,7 @@ module Pipelines
     def transforms
       @transforms ||= transforms_config.map do |transform_config|
         transform_class = Object.const_get(transform_config[:class])
-        [ transform_class, transform_config[:attributes] ]
+        [transform_class, transform_config[:attributes]]
       end
     end
   end
