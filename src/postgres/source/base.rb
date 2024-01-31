@@ -5,7 +5,8 @@ require_relative '../../../config/database'
 module Postgres
   module Source
     class Base
-      attr_reader :batch_size, :columns, :database_name, :table_name, :where_clause
+      attr_reader :batch_size, :database_name, :table_name, :where_clause
+
       def initialize(database_name:, columns: nil , batch_size: 1000, table_name: nil, where_clause: nil)
         @database = Database.setup(database_name)
         @columns = columns
@@ -19,7 +20,7 @@ module Postgres
       def each
         offset = 0
         row_count = 0
-        @logger.info "total records to sync #{self.count}"
+        @logger.info "total records to sync #{count}"
 
 
         loop do
@@ -29,9 +30,7 @@ module Postgres
           results = @database.connection.exec(query)
 
           # Check if any rows were returned
-          if results.ntuples == 0
-            break
-          end
+          break if results.ntuples == 0
 
           # Print each row within the current batch
           results.each do |row|
