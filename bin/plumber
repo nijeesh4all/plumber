@@ -37,8 +37,18 @@ class PlumberCli
     end
   end
 
+  # The Inti class represents a subcommand for initializing the project.
+  class Initialize < Dry::CLI::Command
+    desc 'initialize the project, it create the necessary files,'
+    def call(*)
+      puts 'Creating .env file'
+      FileUtils.cp('.env.template', '.env') unless File.exist?('.env')
+    end
+  end
+
   register 'ls', ListPipelines, aliases: %w[ls -ls --ls]
   register 'run', Run
+  register 'init', Initialize
 end
 
 Dry::CLI.new(PlumberCli).call
