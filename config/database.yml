@@ -1,16 +1,17 @@
 rently:
-  host: 172.18.0.3
-  port: 5432
-  dbname: rently
-  user: docker
-  password: docker
+  host: <%= ENV['POSTGRES_RENTLY_DB_HOST'] %>
+  port: <%= ENV['POSTGRES_RENTLY_DB_PORT'] %>
+  dbname: <%= ENV['POSTGRES_RENTLY_DBNAME'] %>
+  user: <%= ENV['POSTGRES_RENTLY_USER'] %>
+  password: <%= ENV['POSTGRES_RENTLY_PASSWORD'] %>
 
 armor:
-  host: 172.18.0.3
-  port: 5432
-  dbname: armor_development_2
-  user: docker
-  password: docker
+  host: <%= ENV['POSTGRES_ARMOR_DB_HOST'] %>
+  port: <%= ENV['POSTGRES_ARMOR_DB_PORT'] %>
+  dbname: <%= ENV['POSTGRES_ARMOR_DBNAME'] %>
+  user: <%= ENV['POSTGRES_ARMOR_USER'] %>
+  password: <%= ENV['POSTGRES_ARMOR_PASSWORD'] %>
+
 
 #pipeline:
 #  - name: source_to_destination
