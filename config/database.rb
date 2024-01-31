@@ -17,22 +17,21 @@ class Database
   template = ERB.new File.new('config/database.yml').read
   CONFIG = YAML.load template.result(binding)
 
-  CONNECTIONS = {}.freeze
   def self.setup(database_name)
-    return CONNECTIONS[database_name] if CONNECTIONS[database_name]
+    return connections[database_name] if connections[database_name]
 
     if CONFIG[database_name]
-      CONNECTIONS[database_name] = new(CONFIG[database_name])
-      return CONNECTIONS[database_name]
+      connections[database_name] = new(CONFIG[database_name])
+      return connections[database_name]
     end
 
     raise "No database configuration for '#{database_name}' found"
   end
 
   def self.close_active_connections
-    CONNECTIONS.each do |name, connection|
+    connections.each do |name, connection|
       connection.close if connection.active?
-      CONNECTIONS.delete(name)
+      connections.delete(name)
     end
   end
 
@@ -48,5 +47,9 @@ class Database
 
   def close
     connection.finish
+  end
+
+  def self.connections
+    @connections ||= {}
   end
 end
