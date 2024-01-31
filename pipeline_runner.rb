@@ -59,5 +59,4 @@ class PipelineRunner
   def skip_pipeline?(pipeline_name)
     @pipelines_to_run.any? && !@pipelines_to_run.include?(pipeline_name)
   end
-
 end
