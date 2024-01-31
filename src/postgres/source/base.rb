@@ -7,7 +7,7 @@ module Postgres
     class Base
       attr_reader :batch_size, :database_name, :table_name, :where_clause
 
-      def initialize(database_name:, columns: nil , batch_size: 1000, table_name: nil, where_clause: nil)
+      def initialize(database_name:, columns: nil, batch_size: 1000, table_name: nil, where_clause: nil)
         @database = Database.setup(database_name)
         @columns = columns
         @batch_size = batch_size
@@ -22,7 +22,6 @@ module Postgres
         row_count = 0
         @logger.info "total records to sync #{count}"
 
-
         loop do
           query = "#{select_query} OFFSET #{offset} LIMIT #{batch_size}"
           @logger.info 'running query', query
@@ -30,7 +29,7 @@ module Postgres
           results = @database.connection.exec(query)
 
           # Check if any rows were returned
-          break if results.ntuples == 0
+          break if results.ntuples.zero?
 
           # Print each row within the current batch
           results.each do |row|
@@ -42,7 +41,6 @@ module Postgres
           offset += batch_size
           break if row_count >= batch_size
         end
-
       end
 
       def count
@@ -61,8 +59,6 @@ module Postgres
       def columns
         @columns.nil? ? '*' : @columns.join(', ')
       end
-
     end
-
   end
 end
