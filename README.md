@@ -12,6 +12,11 @@ To use this ETL tool, you need to have Ruby installed on your system. You can in
 bundle install
 ```
 
+#### Initialize
+```bash
+bin/plumber init
+```
+
 ## Running the ETL with CLI
 
 ### Available Commands
