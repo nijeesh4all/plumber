@@ -18,7 +18,8 @@
         - last_sign_in_at
         - current_sign_in_ip
         - last_sign_in_ip
-        - user_id fullname
+        - user_id
+        - fullname
         - voice_phone
         - active
         - created_at
