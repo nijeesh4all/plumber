@@ -75,12 +75,12 @@ The pipeline definition is structured in a YAML format, specifying the source, t
 
 ```yaml
 - pipeline:
-  name: 'Sync agents from rently to armor'
+  name: 'Sync agents from database_1 to database_2'
   source:
     class: 'Postgres::Source::Base'
     attributes:
-      database_name: 'rently'
-      table_name: 'agents'
+      database_name: 'database_1'
+      table_name: 'users'
       columns:
         - id
         - email
@@ -90,19 +90,19 @@ The pipeline definition is structured in a YAML format, specifying the source, t
     - class: 'Transforms::ValueCopy'
       attributes:
         columns_map:
-          updated_at: 'rently_agent_last_updated'
+          updated_at: 'user_last_updated'
 
     - class: 'Transforms::ColumnRename'
       attributes:
         columns_map:
-          id: 'rently_id'
+          id: 'external_user_id'
           # Add more column renaming as needed
 
   destination:
     class: 'Postgres::Destination::Base'
     attributes:
-      database_name: 'armor'
-      table_name: 'agent_identities'
+      database_name: 'database_1'
+      table_name: 'users'
       columns:
         - email
         - id
